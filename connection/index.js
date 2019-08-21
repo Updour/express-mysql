@@ -8,6 +8,6 @@ let connection = mysql.createPool({
 	database: 'first_table',
 	host: 'localhost',
 	port: '3306',
-	multipleStatements: true
+	multipleStaetments: true
 })
 module.exports = connection;

@@ -19,9 +19,9 @@ users.one = id => {
 	return new Promise(( resolve, reject ) => {
 		db.query('SELECT * FROM users WHERE id_user = ?', [id], (err, results) => {
 			if (err) {
-				return reject({ message: 'Data not available', error: true })
+				return reject({ message: 'Data by id not available', error: true })
 			}
-			return resolve({ message: 'Data available', error: false, data:results[0] })
+			return resolve({ message: 'Data id available', error: false, data:results[0] })
 		})
 	})
 }
@@ -32,7 +32,11 @@ users.two = (id, name) => {
 			if (err) {
 				return reject({ message: 'Data not available', error: true })
 			}
-			return resolve({ message: 'Data available', error: false, data:results[0] })
+			return resolve({ 
+				message: 'Data available', 
+				error: false, 
+				data:results[0], 
+			})
 		})
 	})
 }
@@ -53,16 +57,39 @@ users.insert = (id_user, name_user, address_user) => {
 }
 
 // update
-users.update = (id, name, address) => {
+users.edit = id => {
 	return new Promise(( resolve, reject ) => {
-		db.query("UPDATE users SET WHERE id_user=? ",	[id, name, address], 
+		db.query('SELECT * FROM users WHERE id_user = ?', [id], (err, results) => {
+			if (err) {
+				return reject({ message: 'Data not available', error: true })
+			}
+			return resolve({ message: 'Data available to update', error: false, data:results[0] })
+		})
+	})
+}
+users.updates = (id, name, address) => {
+	return new Promise(( resolve, reject ) => {
+		db.query("UPDATE users SET name_user=?, address_user=? WHERE id_user=?",	
+		[name, address, id],
 		(err, results) => {
 			if (err) {
-				console.log(err)
 				return reject({ message: 'Invalid data', error: true })
 			}
-     	return resolve({ message: 'Data has been updated successfully.', error: false, data:results.affectedRows })
-     })
+			return resolve({ message: 'Data has been updated successfully.', error: false, data:results.affectedRows })
+		})
+	})
+}
+
+// delete
+users.delete = id => {
+	return new Promise(( resolve, reject ) => {
+		db.query('DELETE FROM users WHERE id_user = ?', [id], (err, results) => {
+			if (err) {
+				return reject({ message: 'Data not deleted', error: true })
+			}
+				console.log(results)
+			return resolve({ message: 'Data delete successfully', error: false, data:results[0] })
+		})
 	})
 }
  module.exports = users;
